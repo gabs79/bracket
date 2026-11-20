@@ -51,7 +51,7 @@ const MatchCard = ({ match, delay = 0 }) => {
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35, delay }}
-      className="w-64 bg-slate-900/80 backdrop-blur-md border border-white/15 rounded-xl overflow-hidden shadow-2xl"
+      className="w-[min(16rem,calc(100vw-2rem))] shrink-0 bg-slate-900/80 backdrop-blur-md border border-white/15 rounded-xl overflow-hidden shadow-2xl"
     >
       <div className="bg-white/5 px-3.5 py-1.5 text-[10px] uppercase tracking-widest text-emerald-400 font-bold flex justify-between items-center">
         <span>{match.roundName}</span>
@@ -94,28 +94,45 @@ export default function ChampionshipBracket() {
       : null;
 
   return (
-    <div className="relative min-h-screen w-full text-white overflow-x-auto font-sans">
+    <div className="relative min-h-screen w-full text-white overflow-x-hidden font-sans">
       <div
         className="fixed inset-0 bg-cover bg-center z-0 scale-105"
         style={{ backgroundImage: `url('${TOURNAMENT_DATA.backgroundImage}')` }}
       />
       <div className="fixed inset-0 bg-gradient-to-br from-slate-950/90 via-emerald-950/80 to-slate-950/95 z-0" />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 py-10 flex flex-col items-center">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 py-6 sm:px-6 sm:py-10 flex flex-col items-center">
         <motion.div
           initial={{ opacity: 0, y: -15 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-10"
+          className="w-full text-center mb-7 sm:mb-10"
         >
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-xs font-bold uppercase tracking-widest mb-3">
             <Trophy className="w-3.5 h-3.5" /> {TOURNAMENT_DATA.season}
           </div>
-          <h1 className="text-4xl md:text-5xl font-black tracking-tight uppercase">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight uppercase leading-tight">
             {TOURNAMENT_DATA.tournamentName} <span className="text-emerald-400">Bannockburn</span>
           </h1>
         </motion.div>
 
-        <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-0 w-full">
+        <div className="w-full overflow-x-auto overscroll-x-contain pb-4 md:overflow-visible">
+        <div className="flex w-max min-w-full items-start gap-4 px-1 md:hidden">
+          <section className="flex flex-col gap-3">
+            <h2 className="text-xs font-bold uppercase tracking-widest text-emerald-300">Quarterfinals</h2>
+            {quarterfinals.map((match, i) => <MatchCard key={match.id} match={match} delay={i * 0.1} />)}
+          </section>
+          <section className="flex flex-col gap-3">
+            <h2 className="text-xs font-bold uppercase tracking-widest text-emerald-300">Semifinals</h2>
+            {semifinals.map((match, i) => <MatchCard key={match.id} match={match} delay={0.4 + i * 0.1} />)}
+          </section>
+          <section className="flex min-w-64 flex-col gap-3">
+            <h2 className="text-xs font-bold uppercase tracking-widest text-emerald-300">Final</h2>
+            {finalMatch && <MatchCard match={finalMatch} delay={0.6} />}
+            {champion && <div className="w-64 rounded-xl border border-amber-400/50 bg-amber-500/20 p-4 text-center"><Trophy className="mx-auto mb-1 h-8 w-8 text-amber-400" /><div className="text-[10px] font-bold uppercase tracking-widest text-amber-300">Tournament Champion</div><div className="mt-0.5 text-lg font-black">{champion.name}</div></div>}
+          </section>
+        </div>
+        <div className="hidden md:flex md:w-full md:items-center md:justify-center">
+        <div className="flex w-max min-w-full flex-col items-center gap-6 md:w-full md:flex-row md:justify-center md:gap-0">
           <div className="flex flex-col gap-8">
             <div className="flex flex-col gap-5">
               {quarterfinals.slice(0, 2).map((match, i) => (
@@ -182,6 +199,8 @@ export default function ChampionshipBracket() {
 
             </AnimatePresence>
           </div>
+        </div>
+        </div>
         </div>
           <div className="mt-8 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-xs font-bold uppercase tracking-widest mb-3">
             <Trophy className="w-3.5 h-3.5" /> {TOURNAMENT_DATA.footnote}
