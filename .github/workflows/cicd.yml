@@ -36,4 +36,4 @@ jobs:
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v4
         with:
-          artifact-name: site-v${{ github.run_number }}
+          artifact_name: site-v${{ github.run_number }}
