@@ -12,7 +12,7 @@ Animated Quarterfinals-to-Final soccer tournament bracket driven by an inline JS
    ```bash
    npm run dev
    ```
-3. tests:
+3. tests (broken when updating data for not played games):
    ```bash
    node --test src/bracketData.test.js
    ```
